@@ -16,10 +16,13 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonCardContent,
+  IonButtons,
 } from "@ionic/react";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 
 const LeadForm: React.FC<any> = () => {
+  const history = useHistory();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -72,81 +75,146 @@ const LeadForm: React.FC<any> = () => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
-          <IonTitle>Enroll Now</IonTitle>
+        <IonToolbar color="primary">
+          <IonTitle>LaunchED - Enroll Now</IonTitle>
+          <IonButtons slot="end">
+            <IonButton 
+              fill="clear" 
+              onClick={() => history.push("/admin/login")}
+              style={{ fontWeight: 500 }}
+            >
+              Admin Login
+            </IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding">
-        <IonCard>
-          <IonCardHeader>
-            <IonCardTitle>Join LaunchED</IonCardTitle>
-          </IonCardHeader>
-          <IonCardContent>
-            <IonItem>
-              <IonLabel position="stacked">Name *</IonLabel>
-              <IonInput
-                value={formData.name}
-                onIonChange={(e) => handleChange("name", e.detail.value!)}
-                required
-              ></IonInput>
-            </IonItem>
+      <IonContent className="ion-padding" style={{ 
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        minHeight: '100%'
+      }}>
+        <div style={{ 
+          maxWidth: '600px', 
+          margin: '20px auto',
+          padding: '20px 0'
+        }}>
+          <IonCard style={{ borderRadius: '16px', boxShadow: '0 8px 32px rgba(0,0,0,0.1)' }}>
+            <IonCardHeader style={{ 
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              color: 'white',
+              padding: '24px',
+              borderRadius: '16px 16px 0 0'
+            }}>
+              <IonCardTitle style={{ 
+                fontSize: '28px', 
+                fontWeight: 'bold',
+                textAlign: 'center',
+                color: 'white'
+              }}>
+                Join LaunchED
+              </IonCardTitle>
+              <p style={{ 
+                textAlign: 'center', 
+                marginTop: '8px',
+                opacity: 0.9,
+                fontSize: '16px'
+              }}>
+                Start your journey with us today!
+              </p>
+            </IonCardHeader>
+            <IonCardContent style={{ padding: '24px' }}>
+              <IonItem lines="full" style={{ marginBottom: '16px', borderRadius: '8px' }}>
+                <IonLabel position="stacked" style={{ fontWeight: 600, marginBottom: '8px' }}>
+                  Full Name *
+                </IonLabel>
+                <IonInput
+                  value={formData.name}
+                  onIonChange={(e) => handleChange("name", e.detail.value!)}
+                  placeholder="Enter your full name"
+                  required
+                ></IonInput>
+              </IonItem>
 
-            <IonItem>
-              <IonLabel position="stacked">Email *</IonLabel>
-              <IonInput
-                type="email"
-                value={formData.email}
-                onIonChange={(e) => handleChange("email", e.detail.value!)}
-                required
-              ></IonInput>
-            </IonItem>
+              <IonItem lines="full" style={{ marginBottom: '16px', borderRadius: '8px' }}>
+                <IonLabel position="stacked" style={{ fontWeight: 600, marginBottom: '8px' }}>
+                  Email Address *
+                </IonLabel>
+                <IonInput
+                  type="email"
+                  value={formData.email}
+                  onIonChange={(e) => handleChange("email", e.detail.value!)}
+                  placeholder="your.email@example.com"
+                  required
+                ></IonInput>
+              </IonItem>
 
-            <IonItem>
-              <IonLabel position="stacked">Phone *</IonLabel>
-              <IonInput
-                type="tel"
-                value={formData.phone}
-                onIonChange={(e) => handleChange("phone", e.detail.value!)}
-                required
-              ></IonInput>
-            </IonItem>
+              <IonItem lines="full" style={{ marginBottom: '16px', borderRadius: '8px' }}>
+                <IonLabel position="stacked" style={{ fontWeight: 600, marginBottom: '8px' }}>
+                  Phone Number *
+                </IonLabel>
+                <IonInput
+                  type="tel"
+                  value={formData.phone}
+                  onIonChange={(e) => handleChange("phone", e.detail.value!)}
+                  placeholder="+1 (555) 123-4567"
+                  required
+                ></IonInput>
+              </IonItem>
 
-            <IonItem>
-              <IonLabel position="stacked">Course</IonLabel>
-              <IonInput
-                value={formData.course}
-                onIonChange={(e) => handleChange("course", e.detail.value!)}
-              ></IonInput>
-            </IonItem>
+              <IonItem lines="full" style={{ marginBottom: '16px', borderRadius: '8px' }}>
+                <IonLabel position="stacked" style={{ fontWeight: 600, marginBottom: '8px' }}>
+                  Course Interest
+                </IonLabel>
+                <IonInput
+                  value={formData.course}
+                  onIonChange={(e) => handleChange("course", e.detail.value!)}
+                  placeholder="e.g., React, Node.js, Python"
+                ></IonInput>
+              </IonItem>
 
-            <IonItem>
-              <IonLabel position="stacked">College</IonLabel>
-              <IonInput
-                value={formData.college}
-                onIonChange={(e) => handleChange("college", e.detail.value!)}
-              ></IonInput>
-            </IonItem>
+              <IonItem lines="full" style={{ marginBottom: '16px', borderRadius: '8px' }}>
+                <IonLabel position="stacked" style={{ fontWeight: 600, marginBottom: '8px' }}>
+                  College/University
+                </IonLabel>
+                <IonInput
+                  value={formData.college}
+                  onIonChange={(e) => handleChange("college", e.detail.value!)}
+                  placeholder="Enter your college name"
+                ></IonInput>
+              </IonItem>
 
-            <IonItem>
-              <IonLabel position="stacked">Year</IonLabel>
-              <IonSelect
-                value={formData.year}
-                onIonChange={(e) => handleChange("year", e.detail.value)}
+              <IonItem lines="full" style={{ marginBottom: '24px', borderRadius: '8px' }}>
+                <IonLabel position="stacked" style={{ fontWeight: 600, marginBottom: '8px' }}>
+                  Academic Year
+                </IonLabel>
+                <IonSelect
+                  value={formData.year}
+                  onIonChange={(e) => handleChange("year", e.detail.value)}
+                  placeholder="Select your year"
+                >
+                  <IonSelectOption value="1">1st Year</IonSelectOption>
+                  <IonSelectOption value="2">2nd Year</IonSelectOption>
+                  <IonSelectOption value="3">3rd Year</IonSelectOption>
+                  <IonSelectOption value="4">4th Year</IonSelectOption>
+                </IonSelect>
+              </IonItem>
+
+              <IonButton 
+                expand="block" 
+                onClick={handleSubmit}
+                style={{
+                  height: '48px',
+                  fontSize: '16px',
+                  fontWeight: 600,
+                  borderRadius: '8px',
+                  marginTop: '8px',
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                }}
               >
-                <IonSelectOption value="1">1st Year</IonSelectOption>
-                <IonSelectOption value="2">2nd Year</IonSelectOption>
-                <IonSelectOption value="3">3rd Year</IonSelectOption>
-                <IonSelectOption value="4">4th Year</IonSelectOption>
-              </IonSelect>
-            </IonItem>
-
-            <div className="ion-padding-top">
-              <IonButton expand="block" onClick={handleSubmit}>
-                Submit
+                Submit Enrollment
               </IonButton>
-            </div>
-          </IonCardContent>
-        </IonCard>
+            </IonCardContent>
+          </IonCard>
+        </div>
 
         <IonToast
           isOpen={showToast}
@@ -154,6 +222,7 @@ const LeadForm: React.FC<any> = () => {
           message={toastMessage}
           duration={3000}
           color={isError ? "danger" : "success"}
+          position="top"
         />
       </IonContent>
     </IonPage>
