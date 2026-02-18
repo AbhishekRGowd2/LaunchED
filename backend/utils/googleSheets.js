@@ -8,18 +8,18 @@ dotenv.config();
 // In a real app, we might use a service account key file path
 const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
 
-const auth = new google.auth.GoogleAuth({
-  keyFile: "credentials.json", // User needs to provide this
-  scopes: SCOPES,
-});
-
 // const auth = new google.auth.GoogleAuth({
-//   credentials: {
-//     client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-//     private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"),
-//   },
+//   keyFile: "credentials.json", // User needs to provide this
 //   scopes: SCOPES,
 // });
+
+const auth = new google.auth.GoogleAuth({
+  credentials: {
+    client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+    private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+  },
+  scopes: SCOPES,
+});
 
 const sheets = google.sheets({ version: "v4", auth });
 const SPREADSHEET_ID = process.env.GOOGLE_SHEETS_ID;
