@@ -39,8 +39,10 @@ const createLead = async (req, res) => {
 
     res.status(201).json(lead);
   } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ message: 'Server Error' });
+    console.error('Create lead error:', error.message || error);
+    res.status(500).json({
+      message: 'Unable to save enrollment. Please try again later.',
+    });
   }
 };
 
@@ -73,8 +75,10 @@ const getLeads = async (req, res) => {
     const leads = await pool.query(query, params);
     res.json(leads.rows);
   } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ message: 'Server Error' });
+    console.error('Get leads error:', error.message || error);
+    res.status(500).json({
+      message: 'Unable to load leads. Please try again later.',
+    });
   }
 };
 
@@ -104,8 +108,10 @@ const updateLeadStatus = async (req, res) => {
 
     res.json(updatedLead);
   } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ message: 'Server Error' });
+    console.error('Update lead error:', error.message || error);
+    res.status(500).json({
+      message: 'Unable to update lead. Please try again later.',
+    });
   }
 };
 

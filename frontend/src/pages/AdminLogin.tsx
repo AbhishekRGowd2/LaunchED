@@ -14,6 +14,7 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonToast,
+  IonSpinner,
 } from "@ionic/react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
@@ -26,6 +27,7 @@ const AdminLogin: React.FC<any> = () => {
   const [message, setMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [emailError, setEmailError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const history = useHistory();
   const { login } = useContext(AuthContext);
@@ -44,16 +46,26 @@ const AdminLogin: React.FC<any> = () => {
       return;
     }
     setEmailError("");
+    setIsLoading(true);
     try {
       const res = await axios.post(
         "https://launched-backend.onrender.com/api/auth/login",
-        { email, password }
+        { email, password },
+        { timeout: 25000 }
       );
       login(res.data.token, res.data); // Save token and user
       history.push("/admin/dashboard");
     } catch (error: any) {
-      setMessage(error.response?.data?.message || "Login failed");
+      const msg =
+        error.code === "ECONNABORTED"
+          ? "Request timed out. Please check your connection and try again."
+          : error.response?.status === 500
+            ? "Something went wrong on our end. Please try again later."
+            : error.response?.data?.message || "Login failed.";
+      setMessage(msg);
       setShowToast(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -150,6 +162,7 @@ const AdminLogin: React.FC<any> = () => {
               <IonButton 
                 expand="block" 
                 onClick={handleLogin}
+                disabled={isLoading}
                 style={{
                   height: '48px',
                   fontSize: '16px',
@@ -158,7 +171,14 @@ const AdminLogin: React.FC<any> = () => {
                   background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
                 }}
               >
-                Sign In
+                {isLoading ? (
+                  <>
+                    <IonSpinner name="crescent" style={{ marginRight: '8px' }} />
+                    Signing in...
+                  </>
+                ) : (
+                  'Sign In'
+                )}
               </IonButton>
               <div style={{ 
                 marginTop: '20px', 

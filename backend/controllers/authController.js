@@ -35,8 +35,10 @@ const authUser = async (req, res) => {
       res.status(401).json({ message: 'Invalid email or password' });
     }
   } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ message: 'Server Error' });
+    console.error('Auth login error:', error.message || error);
+    res.status(500).json({
+      message: 'Unable to sign in. Please try again later.',
+    });
   }
 };
 

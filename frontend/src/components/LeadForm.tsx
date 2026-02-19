@@ -9,14 +9,16 @@ import {
   IonLabel,
   IonInput,
   IonButton,
-  IonSelect,
-  IonSelectOption,
   IonToast,
   IonCard,
   IonCardHeader,
   IonCardTitle,
   IonCardContent,
   IonButtons,
+  IonRadioGroup,
+  IonRadio,
+  IonListHeader,
+  IonSpinner,
 } from "@ionic/react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
@@ -36,6 +38,7 @@ const LeadForm: React.FC<any> = () => {
   const [toastMessage, setToastMessage] = useState("");
   const [isError, setIsError] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; phone?: string }>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (key: string, value: any) => {
     setFormData({ ...formData, [key]: value });
@@ -64,10 +67,12 @@ const LeadForm: React.FC<any> = () => {
       return;
     }
 
+    setIsSubmitting(true);
     try {
       await axios.post(
         "https://launched-backend.onrender.com/api/leads",
-        formData
+        formData,
+        { timeout: 25000 }
       );
       setToastMessage("Enrollment successful! We will contact you soon.");
       setIsError(false);
@@ -82,11 +87,17 @@ const LeadForm: React.FC<any> = () => {
         year: "",
       });
     } catch (error: any) {
-      setToastMessage(
-        error.response?.data?.message || "Submission failed. Please try again."
-      );
+      const msg =
+        error.code === "ECONNABORTED"
+          ? "Request timed out. Please check your connection and try again."
+          : error.response?.status === 500
+            ? "Something went wrong on our end. Please try again later."
+            : error.response?.data?.message || "Submission failed. Please try again.";
+      setToastMessage(msg);
       setIsError(true);
       setShowToast(true);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -224,25 +235,37 @@ const LeadForm: React.FC<any> = () => {
                 ></IonInput>
               </IonItem>
 
-              <IonItem lines="full" style={{ marginBottom: '24px', borderRadius: '8px' }}>
-                <IonLabel position="stacked" style={{ fontWeight: 600, marginBottom: '8px' }}>
-                  Academic Year
-                </IonLabel>
-                <IonSelect
-                  value={formData.year}
-                  onIonChange={(e) => handleChange("year", e.detail.value)}
-                  placeholder="Select your year"
-                >
-                  <IonSelectOption value="1">1st Year</IonSelectOption>
-                  <IonSelectOption value="2">2nd Year</IonSelectOption>
-                  <IonSelectOption value="3">3rd Year</IonSelectOption>
-                  <IonSelectOption value="4">4th Year</IonSelectOption>
-                </IonSelect>
-              </IonItem>
+              <IonListHeader style={{ paddingLeft: 0, marginBottom: '8px' }}>
+                <IonLabel style={{ fontWeight: 600 }}>Academic Year</IonLabel>
+              </IonListHeader>
+              <IonRadioGroup
+                value={formData.year}
+                onIonChange={(e) => handleChange("year", e.detail.value)}
+                className="academic-year-radio-group"
+                style={{ marginBottom: '24px' }}
+              >
+                <IonItem lines="none" style={{ marginBottom: '4px' }}>
+                  <IonRadio value="1" labelPlacement="end" justify="start" />
+                  <IonLabel>1st Year</IonLabel>
+                </IonItem>
+                <IonItem lines="none" style={{ marginBottom: '4px' }}>
+                  <IonRadio value="2" labelPlacement="end" justify="start" />
+                  <IonLabel>2nd Year</IonLabel>
+                </IonItem>
+                <IonItem lines="none" style={{ marginBottom: '4px' }}>
+                  <IonRadio value="3" labelPlacement="end" justify="start" />
+                  <IonLabel>3rd Year</IonLabel>
+                </IonItem>
+                <IonItem lines="none" style={{ marginBottom: '4px' }}>
+                  <IonRadio value="4" labelPlacement="end" justify="start" />
+                  <IonLabel>4th Year</IonLabel>
+                </IonItem>
+              </IonRadioGroup>
 
               <IonButton 
                 expand="block" 
                 onClick={handleSubmit}
+                disabled={isSubmitting}
                 style={{
                   height: '48px',
                   fontSize: '16px',
@@ -252,7 +275,14 @@ const LeadForm: React.FC<any> = () => {
                   background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
                 }}
               >
-                Submit Enrollment
+                {isSubmitting ? (
+                  <>
+                    <IonSpinner name="crescent" style={{ marginRight: '8px' }} />
+                    Submitting...
+                  </>
+                ) : (
+                  'Submit Enrollment'
+                )}
               </IonButton>
             </IonCardContent>
           </IonCard>
