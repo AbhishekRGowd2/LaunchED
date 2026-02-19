@@ -20,6 +20,7 @@ import {
 } from "@ionic/react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
+import { getEmailError, getPhoneError } from "../utils/validation";
 
 const LeadForm: React.FC<any> = () => {
   const history = useHistory();
@@ -34,14 +35,30 @@ const LeadForm: React.FC<any> = () => {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [isError, setIsError] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<{ email?: string; phone?: string }>({});
 
   const handleChange = (key: string, value: any) => {
     setFormData({ ...formData, [key]: value });
+    if (key === "email" || key === "phone") {
+      setFieldErrors((prev) => ({ ...prev, [key]: undefined }));
+    }
   };
 
   const handleSubmit = async () => {
-    if (!formData.name || !formData.email || !formData.phone) {
-      setToastMessage("Please fill in all required fields.");
+    const emailError = getEmailError(formData.email);
+    const phoneError = getPhoneError(formData.phone);
+    const nameMissing = !formData.name?.trim();
+
+    if (nameMissing || emailError || phoneError) {
+      setFieldErrors({
+        email: emailError || undefined,
+        phone: phoneError || undefined,
+      });
+      setToastMessage(
+        nameMissing
+          ? "Please fill in all required fields."
+          : emailError || phoneError
+      );
       setIsError(true);
       setShowToast(true);
       return;
@@ -55,6 +72,7 @@ const LeadForm: React.FC<any> = () => {
       setToastMessage("Enrollment successful! We will contact you soon.");
       setIsError(false);
       setShowToast(true);
+      setFieldErrors({});
       setFormData({
         name: "",
         email: "",
@@ -134,8 +152,15 @@ const LeadForm: React.FC<any> = () => {
                 ></IonInput>
               </IonItem>
 
-              <IonItem lines="full" style={{ marginBottom: '16px', borderRadius: '8px' }}>
-                <IonLabel position="stacked" style={{ fontWeight: 600, marginBottom: '8px' }}>
+              <IonItem
+                lines="full"
+                style={{
+                  marginBottom: "16px",
+                  borderRadius: "8px",
+                  border: fieldErrors.email ? "1px solid var(--ion-color-danger)" : undefined,
+                }}
+              >
+                <IonLabel position="stacked" style={{ fontWeight: 600, marginBottom: "8px" }}>
                   Email Address *
                 </IonLabel>
                 <IonInput
@@ -145,10 +170,22 @@ const LeadForm: React.FC<any> = () => {
                   placeholder="your.email@example.com"
                   required
                 ></IonInput>
+                {fieldErrors.email && (
+                  <p style={{ color: "var(--ion-color-danger)", fontSize: "12px", marginTop: "4px" }}>
+                    {fieldErrors.email}
+                  </p>
+                )}
               </IonItem>
 
-              <IonItem lines="full" style={{ marginBottom: '16px', borderRadius: '8px' }}>
-                <IonLabel position="stacked" style={{ fontWeight: 600, marginBottom: '8px' }}>
+              <IonItem
+                lines="full"
+                style={{
+                  marginBottom: "16px",
+                  borderRadius: "8px",
+                  border: fieldErrors.phone ? "1px solid var(--ion-color-danger)" : undefined,
+                }}
+              >
+                <IonLabel position="stacked" style={{ fontWeight: 600, marginBottom: "8px" }}>
                   Phone Number *
                 </IonLabel>
                 <IonInput
@@ -158,6 +195,11 @@ const LeadForm: React.FC<any> = () => {
                   placeholder="+1 (555) 123-4567"
                   required
                 ></IonInput>
+                {fieldErrors.phone && (
+                  <p style={{ color: "var(--ion-color-danger)", fontSize: "12px", marginTop: "4px" }}>
+                    {fieldErrors.phone}
+                  </p>
+                )}
               </IonItem>
 
               <IonItem lines="full" style={{ marginBottom: '16px', borderRadius: '8px' }}>
