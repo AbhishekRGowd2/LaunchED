@@ -36,7 +36,10 @@ const LeadForm: React.FC<any> = () => {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [isError, setIsError] = useState(false);
-  const [fieldErrors, setFieldErrors] = useState<{ email?: string; phone?: string }>({});
+  const [fieldErrors, setFieldErrors] = useState<{
+    email?: string;
+    phone?: string;
+  }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (key: string, value: any) => {
@@ -90,8 +93,9 @@ const LeadForm: React.FC<any> = () => {
         error.code === "ECONNABORTED"
           ? "Request timed out. Please check your connection and try again."
           : error.response?.status === 500
-            ? "Something went wrong on our end. Please try again later."
-            : error.response?.data?.message || "Submission failed. Please try again.";
+          ? "Something went wrong on our end. Please try again later."
+          : error.response?.data?.message ||
+            "Submission failed. Please try again.";
       setToastMessage(msg);
       setIsError(true);
       setShowToast(true);
@@ -106,8 +110,8 @@ const LeadForm: React.FC<any> = () => {
         <IonToolbar color="primary">
           <IonTitle>LaunchED - Enroll Now</IonTitle>
           <IonButtons slot="end">
-            <IonButton 
-              fill="clear" 
+            <IonButton
+              fill="clear"
               onClick={() => history.push("/admin/login")}
               style={{ fontWeight: 500 }}
             >
@@ -116,42 +120,64 @@ const LeadForm: React.FC<any> = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding" style={{ 
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        minHeight: '100%'
-      }}>
-        <div style={{ 
-          maxWidth: '600px', 
-          margin: '20px auto',
-          padding: '20px 0'
-        }}>
-          <IonCard style={{ borderRadius: '16px', boxShadow: '0 8px 32px rgba(0,0,0,0.1)' }}>
-            <IonCardHeader style={{ 
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              color: 'white',
-              padding: '24px',
-              borderRadius: '16px 16px 0 0'
-            }}>
-              <IonCardTitle style={{ 
-                fontSize: '28px', 
-                fontWeight: 'bold',
-                textAlign: 'center',
-                color: 'white'
-              }}>
+      <IonContent
+        className="ion-padding"
+        style={{
+          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+          minHeight: "100%",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: "600px",
+            margin: "20px auto",
+            padding: "20px 0",
+          }}
+        >
+          <IonCard
+            style={{
+              borderRadius: "16px",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
+            }}
+          >
+            <IonCardHeader
+              style={{
+                background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                color: "white",
+                padding: "24px",
+                borderRadius: "16px 16px 0 0",
+              }}
+            >
+              <IonCardTitle
+                style={{
+                  fontSize: "28px",
+                  fontWeight: "bold",
+                  textAlign: "center",
+                  color: "white",
+                }}
+              >
                 Join LaunchED
               </IonCardTitle>
-              <p style={{ 
-                textAlign: 'center', 
-                marginTop: '8px',
-                opacity: 0.9,
-                fontSize: '16px'
-              }}>
+              <p
+                style={{
+                  textAlign: "center",
+                  marginTop: "8px",
+                  opacity: 0.9,
+                  fontSize: "16px",
+                }}
+              >
                 Start your journey with us today!
               </p>
             </IonCardHeader>
-            <IonCardContent style={{ padding: '24px' }}>
-              <IonItem lines="full" style={{ marginBottom: '16px', borderRadius: '8px' }}>
-                <IonLabel position="stacked" style={{ fontWeight: 600, marginBottom: '8px' }}>
+            <IonCardContent style={{ padding: "24px" }}>
+              <IonItem
+                lines="full"
+                style={{ marginBottom: "16px", borderRadius: "8px" }}
+              >
+                <IonLabel
+                  position="stacked"
+                  style={{ fontWeight: 600, marginBottom: "8px" }}
+                >
                   Full Name *
                 </IonLabel>
                 <IonInput
@@ -167,10 +193,15 @@ const LeadForm: React.FC<any> = () => {
                 style={{
                   marginBottom: "16px",
                   borderRadius: "8px",
-                  border: fieldErrors.email ? "1px solid var(--ion-color-danger)" : undefined,
+                  border: fieldErrors.email
+                    ? "1px solid var(--ion-color-danger)"
+                    : undefined,
                 }}
               >
-                <IonLabel position="stacked" style={{ fontWeight: 600, marginBottom: "8px" }}>
+                <IonLabel
+                  position="stacked"
+                  style={{ fontWeight: 600, marginBottom: "8px" }}
+                >
                   Email Address *
                 </IonLabel>
                 <IonInput
@@ -181,7 +212,13 @@ const LeadForm: React.FC<any> = () => {
                   required
                 ></IonInput>
                 {fieldErrors.email && (
-                  <p style={{ color: "var(--ion-color-danger)", fontSize: "12px", marginTop: "4px" }}>
+                  <p
+                    style={{
+                      color: "var(--ion-color-danger)",
+                      fontSize: "12px",
+                      marginTop: "4px",
+                    }}
+                  >
                     {fieldErrors.email}
                   </p>
                 )}
@@ -192,10 +229,15 @@ const LeadForm: React.FC<any> = () => {
                 style={{
                   marginBottom: "16px",
                   borderRadius: "8px",
-                  border: fieldErrors.phone ? "1px solid var(--ion-color-danger)" : undefined,
+                  border: fieldErrors.phone
+                    ? "1px solid var(--ion-color-danger)"
+                    : undefined,
                 }}
               >
-                <IonLabel position="stacked" style={{ fontWeight: 600, marginBottom: "8px" }}>
+                <IonLabel
+                  position="stacked"
+                  style={{ fontWeight: 600, marginBottom: "8px" }}
+                >
                   Phone Number *
                 </IonLabel>
                 <IonInput
@@ -206,14 +248,26 @@ const LeadForm: React.FC<any> = () => {
                   required
                 ></IonInput>
                 {fieldErrors.phone && (
-                  <p style={{ color: "var(--ion-color-danger)", fontSize: "12px", marginTop: "4px" }}>
+                  <p
+                    style={{
+                      color: "var(--ion-color-danger)",
+                      fontSize: "12px",
+                      marginTop: "4px",
+                    }}
+                  >
                     {fieldErrors.phone}
                   </p>
                 )}
               </IonItem>
 
-              <IonItem lines="full" style={{ marginBottom: '16px', borderRadius: '8px' }}>
-                <IonLabel position="stacked" style={{ fontWeight: 600, marginBottom: '8px' }}>
+              <IonItem
+                lines="full"
+                style={{ marginBottom: "16px", borderRadius: "8px" }}
+              >
+                <IonLabel
+                  position="stacked"
+                  style={{ fontWeight: 600, marginBottom: "8px" }}
+                >
                   Course Interest
                 </IonLabel>
                 <IonInput
@@ -223,8 +277,14 @@ const LeadForm: React.FC<any> = () => {
                 ></IonInput>
               </IonItem>
 
-              <IonItem lines="full" style={{ marginBottom: '16px', borderRadius: '8px' }}>
-                <IonLabel position="stacked" style={{ fontWeight: 600, marginBottom: '8px' }}>
+              <IonItem
+                lines="full"
+                style={{ marginBottom: "16px", borderRadius: "8px" }}
+              >
+                <IonLabel
+                  position="stacked"
+                  style={{ fontWeight: 600, marginBottom: "8px" }}
+                >
                   College/University
                 </IonLabel>
                 <IonInput
@@ -234,15 +294,23 @@ const LeadForm: React.FC<any> = () => {
                 ></IonInput>
               </IonItem>
 
-              <IonItem lines="full" style={{ marginBottom: '24px', borderRadius: '8px' }} className="academic-year-select">
-                <IonLabel position="stacked" style={{ fontWeight: 600, marginBottom: '8px' }}>
+              <IonItem
+                lines="full"
+                style={{ marginBottom: "24px", borderRadius: "8px" }}
+                className="academic-year-select"
+              >
+                <IonLabel
+                  position="stacked"
+                  style={{ fontWeight: 600, marginBottom: "8px" }}
+                >
                   Academic Year
                 </IonLabel>
                 <IonSelect
                   value={formData.year}
                   onIonChange={(e) => handleChange("year", e.detail.value)}
                   placeholder="Select your year"
-                  interface="alert"
+                  interface="popover"
+                  multiple={false}
                 >
                   <IonSelectOption value="1">1st Year</IonSelectOption>
                   <IonSelectOption value="2">2nd Year</IonSelectOption>
@@ -251,26 +319,30 @@ const LeadForm: React.FC<any> = () => {
                 </IonSelect>
               </IonItem>
 
-              <IonButton 
-                expand="block" 
+              <IonButton
+                expand="block"
                 onClick={handleSubmit}
                 disabled={isSubmitting}
                 style={{
-                  height: '48px',
-                  fontSize: '16px',
+                  height: "48px",
+                  fontSize: "16px",
                   fontWeight: 600,
-                  borderRadius: '8px',
-                  marginTop: '8px',
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                  borderRadius: "8px",
+                  marginTop: "8px",
+                  background:
+                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                 }}
               >
                 {isSubmitting ? (
                   <>
-                    <IonSpinner name="crescent" style={{ marginRight: '8px' }} />
+                    <IonSpinner
+                      name="crescent"
+                      style={{ marginRight: "8px" }}
+                    />
                     Submitting...
                   </>
                 ) : (
-                  'Submit Enrollment'
+                  "Submit Enrollment"
                 )}
               </IonButton>
             </IonCardContent>
