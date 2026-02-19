@@ -1,5 +1,10 @@
 LaunchED - Lead Management System
 
+IMPORTANT : 
+ADMIN CREDENTIALS : 
+admin@launchedglobal.in
+admin123
+
 A full-stack web application for managing student enrollment leads with Google Sheets integration. LaunchED allows students to submit enrollment forms while providing administrators with a dashboard to track, manage, and follow up on leads.
 
 Overview
