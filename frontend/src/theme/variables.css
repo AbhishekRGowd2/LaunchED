@@ -1,9 +1,9 @@
 /* For information on how to create your own theme, please refer to:
 http://ionicframework.com/docs/theming/ */
 
-/* Center the radio selection indicator inside the circle */
+/* Center the selection dot inside the circle (ion-select alert + any ion-radio) */
 ion-radio {
-  --size: 20px;
+  --size: 22px;
 }
 ion-radio::part(container) {
   display: flex;
@@ -16,9 +16,15 @@ ion-radio::part(mark) {
   transform: none;
   border-radius: 50%;
 }
-.academic-year-radio-group ion-item {
-  --inner-padding-end: 0;
+
+/* Alert interface (ion-select): center the radio icon inner dot */
+.alert-radio-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
-.academic-year-radio-group ion-radio {
-  margin-inline-end: 12px;
+.alert-radio-inner {
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
 }
